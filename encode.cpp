@@ -1,5 +1,7 @@
 #include "huffman.h"
+
 using namespace std;
+
 
 void print_freq_table(unordered_map<char,int> table) {
     unordered_map<char, int>::iterator it;
@@ -26,7 +28,7 @@ void make_freq_table(unordered_map<char,int> &table) {
 
 
 
-void dfs(Node* nd, ofstream& file) { //Print pre-order
+void dfs(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
         return;
       file << nd -> val << "*" << nd ->freq << "*";
@@ -37,7 +39,7 @@ void dfs(Node* nd, ofstream& file) { //Print pre-order
     dfs(nd -> right, file);
 }
 
-void sim(Node* nd, ofstream& file) { //Print in-order
+void sim(Node* nd, ofstream& file) { //Print in-order and write to file
     if (nd == nullptr)
         return;
     sim(nd -> left, file);
@@ -56,6 +58,7 @@ int main(){
     print_freq_table(table);
 
     Tree t (table);
+    
     ofstream my_file;
     my_file.open("arvhuf.txt");
     sim(t.root, my_file);
@@ -63,5 +66,3 @@ int main(){
     my_file.close();
     
 }
-
-
