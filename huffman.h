@@ -31,11 +31,10 @@ class Node {
         Node* right;
 };
 
-class FreqComparator
-{
+class FreqComparator {
 public:
-    bool operator() (const Node *n1, const Node *n2)
-    {
+    bool operator() (const Node *n1, const Node *n2) {
+        
         return ( (n1 -> freq) > (n2 -> freq) );
     }
 };
