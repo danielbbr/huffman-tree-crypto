@@ -90,23 +90,23 @@ void print_freq_table(unordered_map<char,int> table) {
 void make_freq_table(unordered_map<char,int> &table) {
     fstream my_file;
     my_file.open("input.txt", ios::in);
-	
+
     if (!my_file)
-	    cout << "No such file" << endl;
-	else {
-	    char ch;
-		while (!my_file.eof()) {
-			my_file >> ch;
+        cout << "No such file" << endl;
+    else {
+        char ch;
+        while (!my_file.eof()) {
+            my_file >> ch;
             if (!my_file.eof()) //To prevent from counting the last char one extra time
                 table[ch]++; 
-		}
-	}
-	my_file.close();
+        }
+    }
+    my_file.close();
 }
 
 
 
-void dfs(Node* nd) {
+void dfs(Node* nd) { //Print pre-order
     if (nd == nullptr)
         return;
     
@@ -117,6 +117,15 @@ void dfs(Node* nd) {
     dfs(nd -> right);
 }
 
+void sim(Node* nd) { //Print in-order
+    if (nd == nullptr)
+        return;
+    sim(nd -> left);
+    sim(nd -> right);
+    //if (nd -> val != '$')
+    cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;    
+}
+
 
 int main(){
     
@@ -125,6 +134,7 @@ int main(){
     print_freq_table(table);
 
     Tree t (table);
-    dfs(t.root);
+    sim(t.root);
     
 }
+
