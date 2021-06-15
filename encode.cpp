@@ -48,6 +48,40 @@ void sim(Node* nd, ofstream& file) { //Print in-order
         cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;    
 }
 
+bool hasPath(Node *root, char x,string& aux)
+{
+    aux = "";
+    // if root is NULL
+    // there is no path
+    if (!root)
+        return false;
+      
+    // push the node's value in 'arr'
+    //arr.push_back(root->val);    
+      
+    // if it is the required node
+    // return true
+    if (root->val == x)    
+        return true;
+      
+    // else check whether the required node lies
+    // in the left subtree or right subtree of 
+    // the current node
+    if (hasPath(root->left, x,aux)){ 
+        aux = aux + '0';
+        return true;
+    }    
+    if (hasPath(root->right, x,aux)){
+        aux = aux + '1';
+        return true; 
+    }
+    // required node does not lie either in the 
+    // left or right subtree of the current node
+    // Thus, remove current node's value from 
+    // 'arr'and then return false    
+    //arr.pop_back();
+    return false;            
+}
 
 int main(){
     
@@ -58,8 +92,13 @@ int main(){
     Tree t (table);
     ofstream my_file;
     my_file.open("arvhuf.txt");
-    sim(t.root, my_file);
-    dfs(t.root, my_file);
+    //sim(t.root, my_file);
+    //dfs(t.root, my_file);
+    string aux = "";
+    
+    hasPath(t.root,'f',aux);
+    reverse(aux.begin(),aux.end());
+    cout<<aux;
     my_file.close();
     
 }
