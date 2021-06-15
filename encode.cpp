@@ -85,6 +85,31 @@ bool hasPath(Node *root, char x,string& aux)
     return false;            
 }
 
+void codificar(Node *root, string input_file){ // cria um arquivo codificado.txt contendo a sequencia binaraia que representa o texto original
+    fstream my_file;
+    fstream output_file;
+    string aux;
+    my_file.open(input_file, ios::in);
+    
+    if (!my_file)
+        cout << "No such file" << endl;
+    else {
+        char ch;
+        string aux="";
+        while (!my_file.eof()) {
+                string aux2="";
+                my_file >> ch;
+                hasPath(root,ch,aux2);
+                reverse(aux2.begin(),aux2.end());
+                aux = aux+aux2; 
+    }
+        my_file.close();
+        output_file.open("codificado.txt",ios::out);
+            output_file << aux;
+        output_file.close();
+    }
+}
+
 int main(){
     
     unordered_map<char,int> table;
@@ -99,9 +124,7 @@ int main(){
     //dfs(t.root, my_file);
     string aux = "";
     
-    hasPath(t.root,'f',aux);
-    reverse(aux.begin(),aux.end());
-    cout<<aux;
+    codificar(t.root,"input.txt");
     my_file.close();
     
 }
