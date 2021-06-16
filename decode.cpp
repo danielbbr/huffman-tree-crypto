@@ -5,28 +5,28 @@ using namespace std;
 
 class recoverTopology {
     public:
-    int t = 0;
-    Node* buildingTree(vector<Node*>pre, vector<Node*>in, int l, int r){
-        if(l > r)
-            return nullptr;
-        
-        int ind = l;
-        for(int i = l; i <= r; i++){
-            if(pre[t]->val == in[i]->val){
-                ind = i;
-                break;
+        int t = 0;
+        Node* build(vector<Node*>pre, vector<Node*>in, int l, int r){
+            if(l > r)
+                return nullptr;
+            
+            int ind = l;
+            for(int i = l; i <= r; i++){
+                if(pre[t]->val == in[i]->val){
+                    ind = i;
+                    break;
+                }
             }
+            t++;
+            Node* p = new Node(in[ind]->freq, in[ind]->val);
+            p->left = build(pre, in, l, ind-1);
+            p->right = build(pre, in, ind+1, r);
+            return p;
         }
-        t++;
-        Node* p = new Node(in[ind]->freq, in[ind]->val);
-        p->left = buildingTree(pre,in,l,ind-1);
-        p->right = buildingTree(pre,in,ind+1,r);
-        return p;
-    }
-    
-    Node* buildTree(vector<Node*>& preorder, vector<Node*>& inorder) {
-        return buildingTree(preorder, inorder, 0, preorder.size() - 1);
-    }
+        
+        Node* build_tree(vector<Node*>& preorder, vector<Node*>& inorder) {
+            return build(preorder, inorder, 0, preorder.size() - 1);
+        }
 };
 
 
@@ -113,10 +113,10 @@ int main() {
     get_tree_input(pre, in);
     
     Tree t;
-    t.root = recoverTopology().buildTree(pre, in);
+    t.root = recoverTopology().build_tree(pre, in);
     
     get_text_file(t.root);
-
+    
 }
 
 
