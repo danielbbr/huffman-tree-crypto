@@ -57,7 +57,7 @@ bool get_tree_input(vector<Node*> &pre, vector<Node*> &in) {
     char val, astk;
     vector<Node*> tree_input;
 
-    while (my_file >> val >> astk >> freq >> astk) {
+    while (my_file >> noskipws >> val >> astk >> freq >> astk) {
         Node* aux = new Node(freq, val);
         tree_input.push_back(aux);
     }
@@ -91,7 +91,7 @@ bool get_text_file(Node* root) {
 
     while (input_file >> c) {
         if (ptr->left == nullptr && ptr->right == nullptr) {
-            output_file << ptr->val;
+            output_file << noskipws << ptr->val;
             ptr = root;
         }
         if (c == '0')
@@ -116,7 +116,7 @@ int main() {
     t.root = recoverTopology().build_tree(pre, in);
     
     get_text_file(t.root);
-    
+
 }
 
 
