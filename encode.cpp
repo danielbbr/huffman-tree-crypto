@@ -31,9 +31,8 @@ void make_freq_table(unordered_map<char,int> &table) {
 void dfs(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
         return;
-      file << nd -> val << "*" << nd ->freq << "*";
-    //if (nd -> val != '$')
-        cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;
+    file << nd -> val << "*" << nd -> freq << "*";
+    //cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;
     
     dfs(nd -> left, file);
     dfs(nd -> right, file);
@@ -46,13 +45,11 @@ void sim(Node* nd, ofstream& file) { //Print in-order and write to file
     sim(nd -> right, file);
     
     file << nd -> val << "*" << nd ->freq << "*";
-    //if (nd -> val != '$')
-        cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;    
+    //cout << "Char: " << nd -> val << " Freq: " << nd -> freq << endl;    
 }
 
-bool hasPath(Node *root, char x,string& aux)
-{
-    aux = "";
+bool char_code(Node *root, char x, string& code) {
+    code = "";
     // if root is NULL
     // there is no path
     if (!root)
@@ -63,18 +60,18 @@ bool hasPath(Node *root, char x,string& aux)
       
     // if it is the required node
     // return true
-    if (root->val == x)    
+    if (root -> val == x)    
         return true;
       
     // else check whether the required node lies
     // in the left subtree or right subtree of 
     // the current node
-    if (hasPath(root->left, x,aux)){ 
-        aux = aux + '0';
+    if (char_code(root -> left, x, code)) { 
+        code = '0' + code;
         return true;
     }    
-    if (hasPath(root->right, x,aux)){
-        aux = aux + '1';
+    if (char_code(root -> right, x, code)) {
+        code = '1' + code;
         return true; 
     }
     // required node does not lie either in the 
@@ -85,10 +82,11 @@ bool hasPath(Node *root, char x,string& aux)
     return false;            
 }
 
-void codificar(Node *root, string input_file){ // cria um arquivo codificado.txt contendo a sequencia binaraia que representa o texto original
+void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file representing original text
     fstream my_file;
     fstream output_file;
     string aux;
+    
     my_file.open(input_file, ios::in);
     
     if (!my_file)
@@ -97,20 +95,19 @@ void codificar(Node *root, string input_file){ // cria um arquivo codificado.txt
         char ch;
         string aux="";
         while (!my_file.eof()) {
-                string aux2="";
+                string aux2= "";
                 my_file >> ch;
-                hasPath(root,ch,aux2);
-                reverse(aux2.begin(),aux2.end());
-                aux = aux+aux2; 
+                char_code(root, ch, aux2);
+                aux = aux + aux2; 
     }
         my_file.close();
-        output_file.open("codificado.txt",ios::out);
+        output_file.open("texto.hfm", ios::out);
             output_file << aux;
         output_file.close();
     }
 }
 
-int main(){
+int main() {
     
     unordered_map<char,int> table;
     make_freq_table(table);
@@ -120,11 +117,12 @@ int main(){
     
     ofstream my_file;
     my_file.open("arvhuf.txt");
-    //sim(t.root, my_file);
-    //dfs(t.root, my_file);
-    string aux = "";
-    
-    codificar(t.root,"input.txt");
+    sim(t.root, my_file);
+    dfs(t.root, my_file);
     my_file.close();
-    
+
+    string aux = "";
+    get_encoded_file(t.root,"input.txt");
+
 }
+
