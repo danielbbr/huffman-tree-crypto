@@ -57,7 +57,7 @@ class Tree {
             
             
             // Variable to encode non-leaf nodes to be off the ASCII table
-            int not_leaf = 256; 
+            int not_leaf = 257; 
             
             //Iterate over heap
             while (pq.size() > 1) { 
