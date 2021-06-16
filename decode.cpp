@@ -5,102 +5,118 @@ using namespace std;
 
 class recoverTopology {
     public:
-        Node* build_tree(vector<Node*>& preorder, vector<Node*>& inorder) {
-            Node *root;
-            root = build(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
-            return root;
-        }
-
-        Node* build(vector<Node*> &preorder, vector<Node*> &inorder, int l1, int r1, int l2, int r2){
-            if(l1 > r1 || l2 > r2) 
-                return nullptr;
-            
-            char value = preorder[l1] -> val;
-            int frequency = preorder[l1] -> freq;
-            
-            Node *root = new Node(frequency, value);
-            root -> val = value;
-
-            int i = l2;
-            while(i <= r2){
-                if(inorder[i] -> val == value) 
-                    break;
-                    i++;
+    int t = 0;
+    Node* buildingTree(vector<Node*>pre, vector<Node*>in, int l, int r){
+        if(l > r)
+            return nullptr;
+        
+        int ind = l;
+        for(int i = l; i <= r; i++){
+            if(pre[t]->val == in[i]->val){
+                ind = i;
+                break;
             }
-            
-            int j = l1 + i - l2;
-            
-            root -> left = build(preorder, inorder, l1 + 1, j, l2, i - 1);
-            root -> right = build(preorder, inorder, j + 1, r1, i + 1, r2);
-            
-            return root;
         }
+        t++;
+        Node* p = new Node(in[ind]->freq, in[ind]->val);
+        p->left = buildingTree(pre,in,l,ind-1);
+        p->right = buildingTree(pre,in,ind+1,r);
+        return p;
+    }
+    
+    Node* buildTree(vector<Node*>& preorder, vector<Node*>& inorder) {
+        return buildingTree(preorder, inorder, 0, preorder.size() - 1);
+    }
 };
 
-void dfs(Node *nd) { //Print pre-order
+
+
+void print_preorder(Node *nd) { //Print pre-order
     if (nd == nullptr)
         return;
-    cout << "Char: " << nd -> val << " Freq: " << nd -> freq << endl;
-    dfs(nd -> left);
-    dfs(nd -> right);
+    cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;
+    print_preorder(nd->left);
+    print_preorder(nd->right);
 }
 
-void sim(Node* nd) { //Print in-order
+void print_inorder(Node* nd) { //Print in-order
     if (nd == nullptr)
         return;
-    sim(nd -> left);
-    sim(nd -> right);
-    cout << "Char: " << nd -> val << " Freq: " << nd -> freq << endl;    
+    print_inorder(nd->left);
+    cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;    
+    print_inorder(nd->right);
 }
 
-
-
-int main() {
-    
-    vector<Node*> tree_input;
-    vector<Node*> pre;
-    vector<Node*> in;
-        
+bool get_tree_input(vector<Node*> &pre, vector<Node*> &in) {
     ifstream my_file("arvhuf.txt");
     if (!my_file.is_open()) {
-        cerr << "Could not open the file - '"
-              << "'" << endl;
-        return EXIT_FAILURE;
+        cerr << "Could not open the file" << endl;
+        return false;
     }
     int freq;
     char val, astk;
-    
+    vector<Node*> tree_input;
+
     while (my_file >> val >> astk >> freq >> astk) {
         Node* aux = new Node(freq, val);
         tree_input.push_back(aux);
     }
     my_file.close();
 
-    
     //First half of input file is in-order
     for (auto it = tree_input.begin(); it < tree_input.begin() + tree_input.size()/2; ++it)
         in.push_back(*it);
-    
-    //Second half of input fike is pre-order
+    //Second half of input file is pre-order
     for (auto it = tree_input.begin() + tree_input.size()/2; it != tree_input.end(); ++it)
         pre.push_back(*it);
-    
-    /*
-    cout << "PRE: " << endl;
-    for (auto x : pre){ 
-        cout << "val: " << x -> val << endl;
-        cout << "freq: " << x -> freq << endl;
-    }
-    cout << endl << "IN: " << endl;
-    for (auto x : in){
-        cout << "val: " << x -> val << endl;
-        cout << "freq: "<< x -> freq << endl;
-    }
-    */
 
-    Tree t;
-    t.root = recoverTopology().build_tree(pre, in);
+    return true;
+}
+
+bool get_text_file(Node* root) {
+    ifstream input_file("texto.hfm");
+    if (!input_file.is_open()) {
+        cerr << "Could not open the file" << endl;
+        return false;
+    }
     
-    dfs(t.root);
+    ofstream output_file("saida.txt");
+    if (!output_file.is_open()) {
+        cerr << "Could not open the file" << endl;
+        return false;
+    }
+
+    char c;
+    Node* ptr = root;
+
+    while (input_file >> c) {
+        if (ptr->left == nullptr && ptr->right == nullptr) {
+            output_file << ptr->val;
+            ptr = root;
+        }
+        if (c == '0')
+            ptr = ptr->left;
+        if (c == '1')
+            ptr = ptr->right;
+    }
+    
+    input_file.close();
+    output_file.close();
+    return true;
+}
+
+
+int main() {
+    
+    vector<Node*> pre;
+    vector<Node*> in;
+    get_tree_input(pre, in);
+    
+    Tree t;
+    t.root = recoverTopology().buildTree(pre, in);
+    
+    get_text_file(t.root);
 
 }
+
+
