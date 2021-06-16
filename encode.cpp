@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 void print_freq_table(unordered_map<char,int> table) {
     unordered_map<char, int>::iterator it;
     for (it = table.begin(); it != table.end(); ++it)
@@ -18,7 +17,7 @@ void make_freq_table(unordered_map<char,int> &table) {
     else {
         char ch;
         while (!my_file.eof()) {
-            my_file >> ch;
+            my_file >> noskipws >> ch;
             if (!my_file.eof()) //To prevent from counting the last char one extra time
                 table[ch]++; 
         }
@@ -31,7 +30,8 @@ void make_freq_table(unordered_map<char,int> &table) {
 void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
         return;
-    file << nd->val << "*" << nd->freq << "*";
+    char c = 31;
+    file << noskipws << nd->val << c << nd->freq << c;
     //cout << "Char: " << nd->val << " Freq: " << nd ->freq << endl;
     
     pre_order(nd->left, file);
@@ -41,8 +41,9 @@ void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
 void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
     if (nd == nullptr)
         return;
+    char c = 31;
     in_order(nd->left, file);
-    file << nd->val << "*" << nd ->freq << "*";
+    file << noskipws << nd->val << c << nd ->freq << c;
     in_order(nd->right, file);
     
     //cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;    
@@ -91,13 +92,13 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
         string aux="";
         while (!my_file.eof()) {
                 string aux2 = "";
-                my_file >> ch;
+                my_file >> noskipws >> ch;
                 char_code(root, ch, aux2);
                 aux = aux + aux2; 
     }
         my_file.close();
         output_file.open("texto.hfm", ios::out);
-        output_file << aux;
+        output_file << noskipws << aux;
         output_file.close();
     }
 }
