@@ -17,12 +17,6 @@ class Node {
             right = nullptr;
         }
         Node(int freq, char val, Node* left, Node* right): freq(freq), val(val), left(left), right(right) {}
-        Node() {
-            freq = 0;
-            val = '$';
-            left = nullptr;
-            right = nullptr;
-        }
 
     public:
         int freq;
@@ -62,6 +56,10 @@ class Tree {
                 pq.push(aux);
             }
             
+            
+            // Variable to encode non-leaf nodes to be off the ASCII table
+            int not_leaf = 256; 
+            
             //Iterate over heap
             while (pq.size() > 1) { 
                 Node *n1, *n2; 
@@ -70,7 +68,8 @@ class Tree {
                 n2 = pq.top();
                 pq.pop();
 
-                Node *aux = new Node(n1 -> freq + n2 -> freq, '$');
+                Node *aux = new Node(n1 -> freq + n2 -> freq, not_leaf);
+                not_leaf++;
                 aux -> left = n1;
                 aux -> right = n2;
                 pq.push(aux);
