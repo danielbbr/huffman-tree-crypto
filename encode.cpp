@@ -50,22 +50,12 @@ void sim(Node* nd, ofstream& file) { //Print in-order and write to file
 
 bool char_code(Node *root, char x, string& code) {
     code = "";
-    // if root is NULL
-    // there is no path
     if (!root)
         return false;
       
-    // push the node's value in 'arr'
-    //arr.push_back(root->val);    
-      
-    // if it is the required node
-    // return true
     if (root -> val == x)    
         return true;
-      
-    // else check whether the required node lies
-    // in the left subtree or right subtree of 
-    // the current node
+
     if (char_code(root -> left, x, code)) { 
         code = '0' + code;
         return true;
@@ -74,13 +64,18 @@ bool char_code(Node *root, char x, string& code) {
         code = '1' + code;
         return true; 
     }
-    // required node does not lie either in the 
-    // left or right subtree of the current node
-    // Thus, remove current node's value from 
-    // 'arr'and then return false    
-    //arr.pop_back();
+
     return false;            
 }
+
+void get_tree_file(Node* root) {
+    ofstream my_file;
+    my_file.open("arvhuf.txt");
+    sim(root, my_file);
+    dfs(root, my_file);
+    my_file.close();
+}
+
 
 void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file representing original text
     fstream my_file;
@@ -107,22 +102,18 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
     }
 }
 
+
+
+
 int main() {
     
     unordered_map<char,int> table;
     make_freq_table(table);
-    print_freq_table(table);
+    //print_freq_table(table);
 
     Tree t (table);
     
-    ofstream my_file;
-    my_file.open("arvhuf.txt");
-    sim(t.root, my_file);
-    dfs(t.root, my_file);
-    my_file.close();
-
-    string aux = "";
-    get_encoded_file(t.root,"input.txt");
+    get_tree_file(t.root);
+    get_encoded_file(t.root, "input.txt");
 
 }
-
