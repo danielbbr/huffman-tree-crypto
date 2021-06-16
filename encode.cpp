@@ -6,7 +6,7 @@ using namespace std;
 void print_freq_table(unordered_map<char,int> table) {
     unordered_map<char, int>::iterator it;
     for (it = table.begin(); it != table.end(); ++it)
-      cout << it -> first << " => " << it -> second << endl;
+      cout << it->first << " => " << it->second << endl;
 }
 
 void make_freq_table(unordered_map<char,int> &table) {
@@ -28,24 +28,24 @@ void make_freq_table(unordered_map<char,int> &table) {
 
 
 
-void dfs(Node* nd, ofstream& file) { //Print pre-order and write to file
+void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
         return;
-    file << nd -> val << "*" << nd -> freq << "*";
-    //cout << "Char: " << nd -> val << " Freq: " << nd ->freq << endl;
+    file << nd->val << "*" << nd->freq << "*";
+    //cout << "Char: " << nd->val << " Freq: " << nd ->freq << endl;
     
-    dfs(nd -> left, file);
-    dfs(nd -> right, file);
+    pre_order(nd->left, file);
+    pre_order(nd->right, file);
 }
 
-void sim(Node* nd, ofstream& file) { //Print in-order and write to file
+void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
     if (nd == nullptr)
         return;
-    sim(nd -> left, file);
-    sim(nd -> right, file);
+    in_order(nd->left, file);
+    file << nd->val << "*" << nd ->freq << "*";
+    in_order(nd->right, file);
     
-    file << nd -> val << "*" << nd ->freq << "*";
-    //cout << "Char: " << nd -> val << " Freq: " << nd -> freq << endl;    
+    //cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;    
 }
 
 bool char_code(Node *root, char x, string& code) {
@@ -53,14 +53,14 @@ bool char_code(Node *root, char x, string& code) {
     if (!root)
         return false;
       
-    if (root -> val == x)    
+    if (root->val == x)    
         return true;
 
-    if (char_code(root -> left, x, code)) { 
+    if (char_code(root->left, x, code)) { 
         code = '0' + code;
         return true;
     }    
-    if (char_code(root -> right, x, code)) {
+    if (char_code(root->right, x, code)) {
         code = '1' + code;
         return true; 
     }
@@ -71,8 +71,8 @@ bool char_code(Node *root, char x, string& code) {
 void get_tree_file(Node* root) {
     ofstream my_file;
     my_file.open("arvhuf.txt");
-    sim(root, my_file);
-    dfs(root, my_file);
+    in_order(root, my_file);
+    pre_order(root, my_file);
     my_file.close();
 }
 
@@ -90,19 +90,17 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
         char ch;
         string aux="";
         while (!my_file.eof()) {
-                string aux2= "";
+                string aux2 = "";
                 my_file >> ch;
                 char_code(root, ch, aux2);
                 aux = aux + aux2; 
     }
         my_file.close();
         output_file.open("texto.hfm", ios::out);
-            output_file << aux;
+        output_file << aux;
         output_file.close();
     }
 }
-
-
 
 
 int main() {
@@ -112,8 +110,9 @@ int main() {
     //print_freq_table(table);
 
     Tree t (table);
-    
+
     get_tree_file(t.root);
     get_encoded_file(t.root, "input.txt");
 
 }
+
