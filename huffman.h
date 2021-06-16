@@ -16,7 +16,6 @@ class Node {
             left = nullptr;
             right = nullptr;
         }
-        Node(int freq, char val, Node* left, Node* right): freq(freq), val(val), left(left), right(right) {}
 
     public:
         int freq;
