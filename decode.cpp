@@ -4,37 +4,37 @@
 using namespace std;
 
 class recoverTopology {
-public:
-    Node* build_tree(vector<Node*>& preorder, vector<Node*>& inorder) {
-        Node *root;
-        root = build(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
-        return root;
-    }
-
-    Node* build(vector<Node*> &preorder, vector<Node*> &inorder, int l1, int r1, int l2, int r2){
-        if(l1 > r1 || l2 > r2) 
-            return nullptr;
-        
-        char value = preorder[l1] -> val;
-        int frequency = preorder[l1] -> freq;
-        
-        Node *root = new Node(frequency, value);
-        root -> val = value;
-
-        int i = l2;
-        while(i <= r2){
-            if(inorder[i] -> val == value) 
-                break;
-                i++;
+    public:
+        Node* build_tree(vector<Node*>& preorder, vector<Node*>& inorder) {
+            Node *root;
+            root = build(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+            return root;
         }
-        
-        int j = l1 + i - l2;
-        
-        root -> left = build(preorder, inorder, l1 + 1, j, l2, i - 1);
-        root -> right = build(preorder, inorder, j + 1, r1, i + 1, r2);
-        
-        return root;
-    }
+
+        Node* build(vector<Node*> &preorder, vector<Node*> &inorder, int l1, int r1, int l2, int r2){
+            if(l1 > r1 || l2 > r2) 
+                return nullptr;
+            
+            char value = preorder[l1] -> val;
+            int frequency = preorder[l1] -> freq;
+            
+            Node *root = new Node(frequency, value);
+            root -> val = value;
+
+            int i = l2;
+            while(i <= r2){
+                if(inorder[i] -> val == value) 
+                    break;
+                    i++;
+            }
+            
+            int j = l1 + i - l2;
+            
+            root -> left = build(preorder, inorder, l1 + 1, j, l2, i - 1);
+            root -> right = build(preorder, inorder, j + 1, r1, i + 1, r2);
+            
+            return root;
+        }
 };
 
 void dfs(Node *nd) { //Print pre-order
