@@ -30,7 +30,7 @@ void make_freq_table(unordered_map<char,int> &table) {
 void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
         return;
-    char c = 31;
+    char c = ',';
     file << noskipws << nd->val << c << nd->freq << c;
     //cout << "Char: " << nd->val << " Freq: " << nd ->freq << endl;
     
@@ -41,7 +41,7 @@ void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
 void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
     if (nd == nullptr)
         return;
-    char c = 31;
+    char c = ',';
     in_order(nd->left, file);
     file << noskipws << nd->val << c << nd ->freq << c;
     in_order(nd->right, file);
@@ -51,11 +51,13 @@ void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
 
 bool char_code(Node *root, char x, string& code) {
     code = "";
+    
     if (!root)
         return false;
       
-    if (root->val == x)    
+    if (root->val == x) {   
         return true;
+    }
 
     if (char_code(root->left, x, code)) { 
         code = '0' + code;
@@ -81,7 +83,7 @@ void get_tree_file(Node* root) {
 void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file representing original text
     fstream my_file;
     fstream output_file;
-    string aux;
+    string aux, aux2;
     
     my_file.open(input_file, ios::in);
     
@@ -89,9 +91,9 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
         cout << "No such file" << endl;
     else {
         char ch;
-        string aux="";
+        aux = "";
         while (!my_file.eof()) {
-                string aux2 = "";
+                aux2 = "";
                 my_file >> noskipws >> ch;
                 char_code(root, ch, aux2);
                 aux = aux + aux2; 
