@@ -1,4 +1,5 @@
 #include "huffman.h"
+#include <bitset>
 
 using namespace std;
 
@@ -103,6 +104,42 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
     }
 }
 
+string TextToBinaryString(string words) {
+    string binaryString = "";
+    for (char& _char : words) {
+        binaryString +=bitset<8>(_char).to_string();
+    }
+    return binaryString;
+}
+
+void get_ctx(){
+    fstream my_file;
+    fstream output_file;
+    string aux = "";
+    my_file.open("input.txt", ios::in);
+    output_file.open("texto.ctx",ios::out);
+    if (!my_file)
+        cout << "No such file" << endl;
+    else {
+        char ch;
+        while (1) {
+            my_file >> ch;
+            cout <<ch;
+            aux+=ch;
+            if(my_file.eof())
+                break;  
+        }
+    }
+    aux.erase(aux.end()-1);
+    cout<<aux;
+    output_file << TextToBinaryString(aux);
+    
+    my_file.close();
+    output_file.close();
+}
+
+
+
 
 int main() {
     
@@ -114,6 +151,7 @@ int main() {
 
     get_tree_file(t.root);
     get_encoded_file(t.root, "input.txt");
+    get_ctx();
 
 }
 
