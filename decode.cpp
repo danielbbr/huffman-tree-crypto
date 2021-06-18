@@ -89,7 +89,7 @@ bool get_text_file(Node* root) {
     char c;
     Node* ptr = root;
 
-    while (input_file >> c) {
+    while (input_file >> noskipws >> c) {
         if (ptr->left == nullptr && ptr->right == nullptr) {
             output_file << noskipws << ptr->val;
             ptr = root;
@@ -112,10 +112,7 @@ int main() {
     vector<Node*> in;
     get_tree_input(pre, in);
     
-    Tree t;
-    t.root = recoverTopology().build_tree(pre, in);
-    
-    get_text_file(t.root);
+    get_text_file(recoverTopology().build_tree(pre,in));
 
 }
 
