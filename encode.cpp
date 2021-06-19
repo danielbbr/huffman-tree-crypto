@@ -1,12 +1,11 @@
 #include "huffman.h"
-#include <bitset>
 
 using namespace std;
 
 void print_freq_table(unordered_map<char,int> table) {
     unordered_map<char, int>::iterator it;
     for (it = table.begin(); it != table.end(); ++it)
-      cout << it->first << " => " << it->second << endl;
+      cout << (int) it->first << " => " << (int) it->second << endl;
 }
 
 void make_freq_table(unordered_map<char,int> &table) {
@@ -26,7 +25,21 @@ void make_freq_table(unordered_map<char,int> &table) {
     my_file.close();
 }
 
+void print_preorder(Node *nd) { //Print pre-order
+    if (nd == nullptr)
+        return;
+    cout << "Char: " << (int) nd->val << " Freq: " << nd->freq << endl;
+    print_preorder(nd->left);
+    print_preorder(nd->right);
+}
 
+void print_inorder(Node* nd) { //Print in-order
+    if (nd == nullptr)
+        return;
+    print_inorder(nd->left);
+    cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;    
+    print_inorder(nd->right);
+}
 
 void pre_order(Node* nd, ofstream& file) { //Print pre-order and write to file
     if (nd == nullptr)
@@ -44,7 +57,7 @@ void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
         return;
     char c = ',';
     in_order(nd->left, file);
-    file << noskipws << nd->val << c << nd ->freq << c;
+    file << noskipws <<  nd->val << c << nd->freq << c;
     in_order(nd->right, file);
     
     //cout << "Char: " << nd->val << " Freq: " << nd->freq << endl;    
@@ -52,11 +65,10 @@ void in_order(Node* nd, ofstream& file) { //Print in-order and write to file
 
 bool char_code(Node *root, char x, string& code) {
     code = "";
-    
     if (!root)
         return false;
       
-    if (root->val == x) {   
+    if (root->val == (int)x) {   
         return true;
     }
 
@@ -97,6 +109,7 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
                 aux2 = "";
                 my_file >> noskipws >> ch;
                 char_code(root, ch, aux2);
+                
                 aux = aux + aux2; 
     }
         my_file.close();
@@ -106,54 +119,17 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
     }
 }
 
-string TextToBinaryString(string words) {
-    string binaryString = "";
-    for (char& _char : words) {
-        binaryString +=bitset<8>(_char).to_string();
-    }
-    return binaryString;
-}
-
-void get_ctx(){
-    fstream my_file;
-    fstream output_file;
-    string aux = "";
-    my_file.open("input.txt", ios::in);
-    output_file.open("texto.ctx",ios::out);
-    if (!my_file)
-        cout << "No such file" << endl;
-    else {
-        char ch;
-        while (1) {
-            my_file >> ch;
-            cout <<ch;
-            aux+=ch;
-            if(my_file.eof())
-                break;  
-        }
-    }
-    aux.erase(aux.end()-1);
-    cout<<aux;
-    output_file << TextToBinaryString(aux);
-    
-    my_file.close();
-    output_file.close();
-}
-
-
-
 
 int main() {
     
     unordered_map<char,int> table;
     make_freq_table(table);
-    //print_freq_table(table);
 
     Tree t (table);
-
+    
     get_tree_file(t.root);
     get_encoded_file(t.root, "input.txt");
-    get_ctx();
 
 }
+
 
