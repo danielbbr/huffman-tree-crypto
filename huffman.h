@@ -44,12 +44,7 @@ class Tree {
             //Min heap for frequencies
             priority_queue<Node*, vector<Node*>, FreqComparator> pq;
             
-            /*
-            for (auto it = freq_table.begin(); it != freq_table.end(); ++it) {
-                cout << "Char: " <<  it -> first << " Freq: " << it -> second << endl;
-            }
-            cout << "end" << endl;
-            */
+            
 
             for (auto it = freq_table.begin(); it != freq_table.end(); ++it) {
                 Node* aux = new Node(it->second, it->first);
