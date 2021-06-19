@@ -19,8 +19,8 @@ class recoverTopology {
             }
             t++;
             Node* p = new Node(in[ind]->freq, in[ind]->val);
-            p->left = build(pre, in, l, ind-1);
-            p->right = build(pre, in, ind+1, r);
+            p->left = build(pre, in, l, ind - 1);
+            p->right = build(pre, in, ind + 1, r);
             return p;
         }
         
@@ -53,8 +53,8 @@ bool get_tree_input(vector<Node*> &pre, vector<Node*> &in) {
         cerr << "Could not open the file" << endl;
         return false;
     }
-    int freq;
-    char val, astk;
+    int freq, val;
+    char astk;
     vector<Node*> tree_input;
 
     while (my_file >> noskipws >> val >> astk >> freq >> astk) {
@@ -91,7 +91,7 @@ bool get_text_file(Node* root) {
 
     while (input_file >> noskipws >> c) {
         if (ptr->left == nullptr && ptr->right == nullptr) {
-            output_file << noskipws << ptr->val;
+            output_file << noskipws << (char)ptr->val;
             ptr = root;
         }
         if (c == '0')
@@ -112,8 +112,12 @@ int main() {
     vector<Node*> in;
     get_tree_input(pre, in);
     
-    get_text_file(recoverTopology().build_tree(pre,in));
+    Tree t;
+    t.root = recoverTopology().build_tree(pre, in);
+
+    get_text_file(t.root);
 
 }
+
 
 
