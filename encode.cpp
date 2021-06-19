@@ -100,7 +100,7 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
                 my_file >> noskipws >> ch;
                 char_code(root, ch, aux2);
                 aux = aux + aux2;
-                cout << (int)ch << "-> " <<aux2<< endl; 
+                
     }
         my_file.close();
         output_file.open("texto.hfm", ios::out);
@@ -108,16 +108,6 @@ void get_encoded_file(Node *root, string input_file) { // Creates texto.hfm file
         output_file.close();
     }
 }
-
-string TextToBinaryString(string words) {
-    string binaryString = "";
-    for (char& _char : words) {
-        binaryString +=bitset<8>(_char).to_string();
-    }
-    return binaryString;
-}
-
-
 
 
 int main() {
