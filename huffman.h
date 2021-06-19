@@ -6,11 +6,12 @@
 #include <unordered_map>
 #include <algorithm>
 #include <queue>
+
 using namespace std;
 
 class Node {
     public:
-        Node(int frequency, char value) {
+        Node(int frequency, int value) {
             freq = frequency;
             val = value;
             left = nullptr;
@@ -19,7 +20,7 @@ class Node {
 
     public:
         int freq;
-        char val;
+        int val;
         Node* left;
         Node* right;
 };
@@ -51,7 +52,7 @@ class Tree {
             */
 
             for (auto it = freq_table.begin(); it != freq_table.end(); ++it) {
-                Node* aux = new Node(it -> second, it -> first);
+                Node* aux = new Node(it->second, it->first);
                 pq.push(aux);
             }
             
