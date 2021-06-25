@@ -1,3 +1,3 @@
-# Huffman-Tree
+# huffman-tree-crypto
 
-Final project on data structures and algorithms class
+Project on data structures and algorithms class.
